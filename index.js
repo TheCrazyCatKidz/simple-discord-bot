@@ -24,6 +24,17 @@ const fs = require("node:fs");
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 
+// ========================
+// Section: Client Initials
+// ========================
+// This is where you want to execute certain functions per certain event.
+
+client.on('ready', () => {
+   client.user.setActivity("with my API")
+  // This will display Playing with my API
+})
+
+
 // =========================
 // Section: Command Handling
 // =========================
