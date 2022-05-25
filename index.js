@@ -23,6 +23,7 @@ const client = new Client({ intents: 32767 });
 const fs = require("node:fs");
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
+const config = require("./config.json")
 
 // ========================
 // Section: Client Initials
@@ -47,20 +48,18 @@ client.on('ready', () => {
 const commmands = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 client.commands = new Collection();
-const clientId = 'PUT YOUR CLIENT ID IN THIS SPACE HERE';
-const guildId = 'PUT YOUR GUILD ID IN THIS SPACE HERE';
 for (const file of commandFiles) {
   const command = require(`./commands/${file}`);
   commands.push(command.data.toJSON());
   client.commands.set(command.data.name, command);
 };
-const rest = new REST({ version: '9' }).setToken("PUT YOUR BOT TOKEN IN THIS SPACE HERE");
+const rest = new REST({ version: '9' }).setToken(config.token);
 (async () => {
   try {
     console.log('[⏱️] Processing [/] Slash Commands');
 
     await rest.put(
-      Routes.applicationGuildCommands(clientId, guildId),
+      Routes.applicationGuildCommands(config.clientId, config.guildId),
       { body: commands },
     );
 
@@ -76,7 +75,7 @@ const rest = new REST({ version: '9' }).setToken("PUT YOUR BOT TOKEN IN THIS SPA
 // This consists of setting the bot token for the bot and doing finishing console logging.
 
 module.exports.discord = client;
-client.login("PUT YOUR BOT TOKEN IN THIS SPACE HERE")
+client.login(config.token)
 
 // ====================================================
 // This is the end of index.js.
